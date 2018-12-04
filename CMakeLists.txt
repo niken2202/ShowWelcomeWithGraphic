@@ -10,12 +10,11 @@ include_directories(${SDL2_INCLUDE_DIR}
                     )
 
 add_executable(
-flappybird 
-Bird.cpp CMakeLists.txt  CppFlappy.h 	Pipe.h     World.h
-Bird.h    CppFlappy.cpp   main.cpp     Pipe.cpp  World.cpp
-
+welcome
+main.cpp
+Environment.h
+Environment.cpp
 )
-message(STATUS "fdfdff ${SDL2_IMAGE_LIBRARIES}")
-target_link_libraries(flappybird ${SDL2_LIBRARY}
+target_link_libraries(welcome ${SDL2_LIBRARY}
                              ${SDL2_IMAGE_LIBRARIES} "/usr/lib/x86_64-linux-gnu/libSDL2_ttf.so;-lpthread")
 

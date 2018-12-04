@@ -1,5 +1,9 @@
-#include <iosstream>
+
+#include "Environment.h"
 
 int main(){
-    std::cout<<"Hello";
+    Window* window = new Window;
+    window->Init();
+    window->DrawScreen();
+    return 0;
 }
