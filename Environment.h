@@ -3,6 +3,9 @@
 #define SCREEN_HEIGHT 600
 
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <string>
+#include <algorithm>
 class SDL_Texture;
 class SDL_Window;
 class SDL_Renderer;
@@ -22,4 +25,6 @@ class Window {
     SDL_Window*                 m_Window;
     SDL_Texture*                m_Screen;
     SDL_Renderer*               m_Renderer;
+    TTF_Font*                   font ;
+    void                        RenderText(std::string s);
 };

@@ -71,6 +71,10 @@ void Window::Init()
         std::cout << "Loaded Screen" << std::endl;
 
     SDL_FreeSurface(surface);
+   
+    TTF_Init();
+    font = TTF_OpenFont("font//Vegan Style Personal Use.ttf",80);
+   //TTF_SetFontStyle(font, TTF_STYLE_STRIKETHROUGH);
 
     m_Init = true;
 }
@@ -86,11 +90,34 @@ void Window::DrawScreen()
             {
                 stop = true;
             }
+           
         }
 
         SDL_RenderCopy(m_Renderer, m_Screen, NULL, NULL);
+        RenderText("What is your name ?");
         SDL_RenderPresent(m_Renderer);
     }
 
     SDL_RenderClear(m_Renderer);
+}
+
+void Window::RenderText(std::string s){
+
+    SDL_Color White = {255, 255, 255}; 
+    
+    char const *pchar = s.c_str();
+    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, pchar, White);
+    SDL_Texture* Message = SDL_CreateTextureFromSurface(m_Renderer, surfaceMessage); 
+    SDL_Rect Message_rect; //create a rect
+
+    Message_rect.x = SDL_GetWindowSurface(m_Window)->w/2-250;  //controls the rect's x coordinate
+    Message_rect.y = SDL_GetWindowSurface(m_Window)->w/9; // controls the rect's y coordinte
+  
+    Message_rect.w =500; // controls the width of the rect
+    Message_rect.h = 80; // controls the height of the rect
+
+    SDL_RenderCopy(m_Renderer, Message, NULL, &Message_rect);
+    SDL_FreeSurface(surfaceMessage);
+    SDL_DestroyTexture(Message);
+
 }
