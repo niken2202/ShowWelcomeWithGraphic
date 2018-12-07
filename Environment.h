@@ -1,6 +1,7 @@
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
+#define FONT_SIZE 70
 
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -26,5 +27,6 @@ class Window {
     SDL_Texture*                m_Screen;
     SDL_Renderer*               m_Renderer;
     TTF_Font*                   font ;
-    void                        RenderText(std::string s);
+    void                        RenderText(std::string s, int y);
+    void                        TextInput();
 };

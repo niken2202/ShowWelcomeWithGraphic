@@ -71,53 +71,80 @@ void Window::Init()
         std::cout << "Loaded Screen" << std::endl;
 
     SDL_FreeSurface(surface);
-   
+
     TTF_Init();
-    font = TTF_OpenFont("font//Vegan Style Personal Use.ttf",80);
-   //TTF_SetFontStyle(font, TTF_STYLE_STRIKETHROUGH);
+    font = TTF_OpenFont("font//BrookeS8.ttf", FONT_SIZE);
+    //TTF_SetFontStyle(font, TTF_STYLE_STRIKETHROUGH);
 
     m_Init = true;
 }
 
 void Window::DrawScreen()
 {
+    std::string name = "";
     bool stop = false;
     while (!stop)
     {
+        SDL_RenderCopy(m_Renderer, m_Screen, NULL, NULL);
+        RenderText("What is your name ?", SDL_GetWindowSurface(m_Window)->h / 3);
+        RenderText(name, SDL_GetWindowSurface(m_Window)->h / 2);
+        SDL_RenderPresent(m_Renderer);
+
         while (SDL_PollEvent(&m_Event) != 0)
         {
             if (m_Event.type == SDL_KEYDOWN && m_Event.key.keysym.sym == SDLK_ESCAPE)
             {
                 stop = true;
             }
-           
+            else if (m_Event.type == SDL_TEXTINPUT)
+            {
+                system("clear");
+                name += m_Event.text.text;
+            }
+            else if (m_Event.type == SDL_KEYDOWN && m_Event.key.keysym.sym == SDLK_KP_ENTER)
+            {
+                
+            }
+            else if (m_Event.type == SDL_KEYDOWN && m_Event.key.keysym.sym == SDLK_BACKSPACE)
+            {
+                name.erase(name.end() - 1);
+            }
         }
 
-        SDL_RenderCopy(m_Renderer, m_Screen, NULL, NULL);
-        RenderText("What is your name ?");
-        SDL_RenderPresent(m_Renderer);
+       
     }
 
     SDL_RenderClear(m_Renderer);
 }
 
-void Window::RenderText(std::string s){
+void Window::RenderText(std::string s, int y)
+{
 
-    SDL_Color White = {255, 255, 255}; 
-    
+    SDL_Color White = {255, 255, 255};
+
     char const *pchar = s.c_str();
-    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, pchar, White);
-    SDL_Texture* Message = SDL_CreateTextureFromSurface(m_Renderer, surfaceMessage); 
-    SDL_Rect Message_rect; //create a rect
+    SDL_Surface *surfaceMessage = TTF_RenderText_Solid(font, pchar, White);
+    SDL_Texture *Message = SDL_CreateTextureFromSurface(m_Renderer, surfaceMessage);
 
-    Message_rect.x = SDL_GetWindowSurface(m_Window)->w/2-250;  //controls the rect's x coordinate
-    Message_rect.y = SDL_GetWindowSurface(m_Window)->w/9; // controls the rect's y coordinte
-  
-    Message_rect.w =500; // controls the width of the rect
-    Message_rect.h = 80; // controls the height of the rect
+    SDL_Rect Message_rect;
+    int w, h;
+    if (TTF_SizeText(font, pchar, &w, &h))
+    {
+        std::cout << "Error check font size!" << std::endl;
+        return;
+    }
+
+    Message_rect.w = w;                                             // controls the width of the rect
+    Message_rect.h = h;                                             // controls the height of the rect
+    Message_rect.x = SDL_GetWindowSurface(m_Window)->w / 2 - w / 2; //controls the rect's x coordinate
+    Message_rect.y = y;                                             // controls the rect's y coordinte
 
     SDL_RenderCopy(m_Renderer, Message, NULL, &Message_rect);
     SDL_FreeSurface(surfaceMessage);
     SDL_DestroyTexture(Message);
-
+}
+void Window::TextInput()
+{
+    std::string text = "";
+    SDL_StartTextInput();
 }
