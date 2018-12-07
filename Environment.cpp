@@ -54,7 +54,7 @@ void Window::Init()
 
     if (!surface)
     {
-        std::cout << " Could not loadd Screen\n"
+        std::cout << " Could not load Screen\n"
                   << IMG_GetError();
         return;
     }
@@ -83,35 +83,45 @@ void Window::DrawScreen()
 {
     std::string name = "";
     bool stop = false;
+    bool showResult = false;
     while (!stop)
     {
+
         SDL_RenderCopy(m_Renderer, m_Screen, NULL, NULL);
-        RenderText("What is your name ?", SDL_GetWindowSurface(m_Window)->h / 3);
-        RenderText(name, SDL_GetWindowSurface(m_Window)->h / 2);
+        if (showResult == false)
+        {
+            RenderText("What is your name ?", SDL_GetWindowSurface(m_Window)->h / 3);
+            RenderText(name, SDL_GetWindowSurface(m_Window)->h / 2);
+        } else{
+             RenderText("Hello " + name, SDL_GetWindowSurface(m_Window)->h / 2);
+        }
         SDL_RenderPresent(m_Renderer);
 
         while (SDL_PollEvent(&m_Event) != 0)
         {
-            if (m_Event.type == SDL_KEYDOWN && m_Event.key.keysym.sym == SDLK_ESCAPE)
+            if (m_Event.key.keysym.sym == SDLK_ESCAPE | m_Event.window.event == SDL_WINDOWEVENT_CLOSE)
             {
                 stop = true;
             }
-            else if (m_Event.type == SDL_TEXTINPUT)
+            if (showResult == false)
             {
-                system("clear");
-                name += m_Event.text.text;
-            }
-            else if (m_Event.type == SDL_KEYDOWN && m_Event.key.keysym.sym == SDLK_KP_ENTER)
-            {
-                
-            }
-            else if (m_Event.type == SDL_KEYDOWN && m_Event.key.keysym.sym == SDLK_BACKSPACE)
-            {
-                name.erase(name.end() - 1);
+
+                if (m_Event.type == SDL_TEXTINPUT)
+                {
+                    name += m_Event.text.text;
+                }
+
+                else if (m_Event.type == SDL_KEYDOWN && m_Event.key.keysym.sym == SDLK_BACKSPACE)
+                {
+                    name.erase(name.end() - 1);
+                }
+                else if (m_Event.type == SDL_KEYDOWN && m_Event.key.keysym.sym == SDLK_KP_ENTER | m_Event.key.keysym.sym == SDLK_RETURN)
+                {
+                    showResult = true;
+                    break;
+                }
             }
         }
-
-       
     }
 
     SDL_RenderClear(m_Renderer);
@@ -142,9 +152,4 @@ void Window::RenderText(std::string s, int y)
     SDL_RenderCopy(m_Renderer, Message, NULL, &Message_rect);
     SDL_FreeSurface(surfaceMessage);
     SDL_DestroyTexture(Message);
-}
-void Window::TextInput()
-{
-    std::string text = "";
-    SDL_StartTextInput();
 }

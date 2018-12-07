@@ -28,5 +28,5 @@ class Window {
     SDL_Renderer*               m_Renderer;
     TTF_Font*                   font ;
     void                        RenderText(std::string s, int y);
-    void                        TextInput();
+   
 };
